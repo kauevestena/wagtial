@@ -1,0 +1,16 @@
+<!-- templates/widgets/points_map_widget.html -->
+
+<div id="map" style="width: 100%; height: 500px;"></div>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+        var map = L.map('map').setView([0, 0], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+
+        var points = JSON.parse('{{ widget.points|escapejs }}');
+        points.forEach(function(point) {
+            L.marker([point.geom.coordinates[1], point.geom.coordinates[0]]).addTo(map);
+        });
+    });
+</script>

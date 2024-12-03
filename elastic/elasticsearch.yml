@@ -1,0 +1,28 @@
+# Configuración del nodo y clúster
+cluster.name: elastic-cluster          # Nombre del clúster
+node.name: ${K_SERVICE}                # Nombre del nodo, usando la variable de entorno HOSTNAME
+node.roles: [master, data, ingest]     # Roles para este nodo
+
+# Configuración de red
+network.host: 0.0.0.0                  # Escucha en todas las interfaces
+http.port: 8080                        # Cloud Run requiere el puerto 8080 para tráfico HTTP
+
+# Configuración de almacenamiento
+path.data: /usr/share/elasticsearch/data  # Ruta interna para los datos
+path.logs: /usr/share/elasticsearch/logs  # Ruta interna para los logs
+
+# Seguridad
+xpack.security.enabled: true           # Habilitar seguridad
+xpack.security.http.ssl.enabled: false # Deshabilitar SSL (Cloud Run ya proporciona HTTPS)
+xpack.security.authc.api_key.enabled: true # Habilitar autenticación por API key
+bootstrap.password: ${ELASTIC_PASSWORD} # Contraseña inicial del usuario elastic
+
+# Configuración de descubrimiento
+discovery.type: single-node            # Ejecutar como un solo nodo, ideal para entornos como Cloud Run
+
+# Configuración de memoria (Cloud Run tiene límites de recursos)
+indices.memory.index_buffer_size: 10%  # Tamaño del buffer para índices
+indices.fielddata.cache.size: 10%      # Límite para el cache de fielddata
+
+# Optimización de rendimiento
+thread_pool.write.queue_size: 500      # Tamaño de la cola para operaciones de escritura
